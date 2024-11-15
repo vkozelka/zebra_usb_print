@@ -1,0 +1,17 @@
+{
+  "name": "cz.vaclavkozelka.zebra_usb_print",
+  "version": "0.0.1",
+  "description": "",
+  "cordova": {
+    "id": "cz.vaclavkozelka.zebra_usb_print",
+    "platforms": [
+      "android"
+    ]
+  },
+  "keywords": [
+    "ecosystem:cordova",
+    "cordova-android"
+  ],
+  "author": "Václav Kozelka",
+  "license": "ISC"
+}

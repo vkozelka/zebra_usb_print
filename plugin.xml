@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="cz.vaclavkozelka.zebra_usb_print" version="0.0.1" xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>zebra_usb_print</name>
+    <js-module name="zebra_usb_print" src="www/zebra_usb_print.js">
+        <clobbers target="cordova.plugins.zebra_usb_print"/>
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="zebra_usb_print">
+                <param name="android-package" value="cz.vaclavkozelka.zebra_usb_print.zebra_usb_print"/>
+            </feature>
+        </config-file>
+        <config-file parent="/*" target="AndroidManifest.xml">
+
+        </config-file>
+        <source-file src="src/android/zebra_usb_print.java"
+                     target-dir="src/cz/vaclavkozelka/zebra_usb_print/zebra_usb_print"/>
+
+        <lib-file src="src/android/libs/ZSDK_ANDROID_API.jar" />
+    </platform>
+
+    <framework src="build-extras.gradle" custom="true" type="gradleReference" />
+    <framework src="com.google.code.gson:gson:2.11.0" />
+</plugin>
