@@ -40,7 +40,48 @@ public class zebra_usb_print extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("getDevices")) {
+        if (action.equals("getDevice")) {
+            cordova.getActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    Log.d(TAG, "starting discovery");
+                    try {
+                        mUsbManager = (UsbManager) cordova.getActivity().getSystemService(Context.USB_SERVICE);
+                        mPermissionIntent = PendingIntent.getBroadcast(cordova.getActivity().getApplicationContext(), 0, new Intent(ACTION_USB_PERMISSION), 0);
+
+                        UsbDiscoveryHandler handler = new UsbDiscoveryHandler();
+                        UsbDiscoverer.findPrinters(cordova.getActivity().getApplicationContext(), handler);
+
+                        Log.d(TAG, "Finding printers");
+                        while (!handler.discoveryComplete) {
+                            Thread.sleep(100);
+                        }
+                        Log.d(TAG, "Finding complete");
+                        if (handler.printers != null && handler.printers.size() > 0) {
+                            Log.d(TAG, "Found pritners: " + handler.printers.size());
+                            discoveredPrinterUsb = handler.printers.get(0);
+
+                            if (discoveredPrinterUsb.device != null) {
+                                Log.d(TAG, discoveredPrinterUsb.device.getDeviceName());
+                                if (!mUsbManager.hasPermission(discoveredPrinterUsb.device)) {
+                                    mUsbManager.requestPermission(discoveredPrinterUsb.device, mPermissionIntent);
+                                } else {
+                                    callbackContext.error("Permissions granted");
+                                }
+                            } else {
+                                callbackContext.error("Cannot get permission without device");
+                            }
+                        } else {
+                            callbackContext.error("No printer found");
+                        }
+                    } catch (Exception e) {
+                        Log.d(TAG, "Exception: " + e.getMessage());
+                        callbackContext.error(e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+            });
+            return true;
+        } else if (action.equals("printZpl")) {
             String zpl = args.getString(0);
             cordova.getActivity().runOnUiThread(new Runnable() {
                 public void run() {
@@ -102,10 +143,6 @@ public class zebra_usb_print extends CordovaPlugin {
                     }
                 }
             });
-            return true;
-        } else if (action.equals("printZpl")) {
-            String zpl = args.getString(0);
-            this.printZpl(zpl, callbackContext);
             return true;
         }
         return false;

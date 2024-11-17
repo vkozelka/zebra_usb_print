@@ -1,7 +1,7 @@
 var exec = require('cordova/exec');
 
-exports.getDevices = function (zplCode, success, error) {
-    exec(success, error, 'zebra_usb_print', 'getDevices', [zplCode]);
+exports.getDevice = function (success, error) {
+    exec(success, error, 'zebra_usb_print', 'getDevice', []);
 };
 exports.printZpl = function (zplCode, success, error) {
     exec(success, error, 'zebra_usb_print', 'printZpl', [zplCode]);
