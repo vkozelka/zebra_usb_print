@@ -46,7 +46,7 @@ public class zebra_usb_print extends CordovaPlugin {
                     Log.d(TAG, "starting discovery");
                     try {
                         mUsbManager = (UsbManager) cordova.getActivity().getSystemService(Context.USB_SERVICE);
-                        mPermissionIntent = PendingIntent.getBroadcast(cordova.getActivity().getApplicationContext(), 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_MUTABLE);
+                        mPermissionIntent = PendingIntent.getBroadcast(cordova.getActivity().getApplicationContext(), 0, new Intent(ACTION_USB_PERMISSION), PendingIntent.FLAG_IMMUTABLE);
 
                         UsbDiscoveryHandler handler = new UsbDiscoveryHandler();
                         UsbDiscoverer.findPrinters(cordova.getActivity().getApplicationContext(), handler);
